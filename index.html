@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEIS - Pure Luxury Space</title>
+    <title>DEIS</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React y Babel -->
@@ -11,15 +11,19 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        /* Tipografía Michroma para el look Luxury/Space */
-        @import url('https://fonts.googleapis.com/css2?family=Michroma&display=swap');
+        /* Tipografías de Kenza: Cinzel para títulos y Poppins para el cuerpo */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
 
         body { 
             background-color: black; 
             margin: 0; 
             overflow: hidden; 
-            font-family: 'Michroma', sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: white;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
         }
 
         /* Firmamento Estrellado */
@@ -222,10 +226,10 @@
                     {!hasEntered ? (
                         /* INTRO LUXURY */
                         <div className="relative z-20 flex flex-col items-center space-y-12 animate-fade-in px-4">
-                            <h1 className="text-7xl md:text-9xl font-normal tracking-[0.4em] text-center uppercase text-white">
+                            <h1 className="text-7xl md:text-9xl font-bold tracking-[0.4em] text-center uppercase text-white">
                                 DEIS
                             </h1>
-                            <button onClick={handleEnter} className="px-16 py-6 border border-white/30 font-bold text-[10px] tracking-[0.6em] uppercase hover:border-white hover:bg-white hover:text-black transition-all duration-700">
+                            <button onClick={handleEnter} className="px-16 py-6 border border-white/30 font-light text-[10px] tracking-[0.6em] uppercase hover:border-white hover:bg-white hover:text-black transition-all duration-700 rounded-full">
                                 Enter System
                             </button>
                         </div>
@@ -237,7 +241,7 @@
                                 <div className="glass-card">
                                     
                                     {/* Nombre Blanco Minimalista */}
-                                    <h1 className="text-4xl md:text-6xl font-normal tracking-[0.5em] text-center uppercase text-white mb-2">
+                                    <h1 className="text-4xl md:text-6xl font-bold tracking-[0.5em] text-center uppercase text-white mb-2">
                                         DEIS
                                     </h1>
 
@@ -259,10 +263,10 @@
                     {/* Reproductor Inferior */}
                     {hasEntered && (
                         <div className={`fixed bottom-10 left-10 z-50 transition-all duration-1000 ${isPlayerExpanded ? 'w-72' : 'w-16'}`}>
-                            <div className="bg-white/[0.02] backdrop-blur-3xl border border-white/5 rounded-none overflow-hidden shadow-2xl">
+                            <div className="bg-white/[0.02] backdrop-blur-3xl border border-white/5 rounded-full overflow-hidden shadow-2xl">
                                 <div className="flex items-center p-5 cursor-pointer justify-between" onClick={() => setIsPlayerExpanded(!isPlayerExpanded)}>
                                     <div className="flex items-center gap-5">
-                                        <div className={`p-1.5 border border-white/10 ${isPlaying ? 'animate-spin-slow text-white' : 'text-white/10'}`}>
+                                        <div className={`p-1.5 border border-white/10 rounded-full ${isPlaying ? 'animate-spin-slow text-white' : 'text-white/10'}`}>
                                             <IconMusic className="w-4 h-4" />
                                         </div>
                                         {isPlayerExpanded && (
@@ -276,7 +280,7 @@
                                 {isPlayerExpanded && (
                                     <div className="px-6 pb-8 space-y-8 animate-fade-in">
                                         <div className="flex items-center justify-center">
-                                            <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-14 h-14 border border-white/5 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                            <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-14 h-14 border border-white/5 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">
                                                 {isPlaying ? (
                                                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
                                                 ) : (
