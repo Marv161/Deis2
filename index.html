@@ -15,7 +15,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
 
         body { 
-            background-color: black; 
+            background-color: #000; 
             margin: 0; 
             overflow: hidden; 
             font-family: 'Poppins', sans-serif;
@@ -41,10 +41,10 @@
             animation: photo-blink 4s infinite ease-in-out;
         }
 
-        /* --- LÓGICA DE TARJETA REPLICADA DE KENZA.HTML --- */
+        /* --- LÓGICA DE TARJETA ESTILO KENZA --- */
         .card-wrapper {
             position: relative;
-            padding: 2px; /* Grosor del borde */
+            padding: 2px;
             border-radius: 2rem;
             overflow: hidden;
             display: flex;
@@ -53,13 +53,11 @@
             box-shadow: 0 0 50px rgba(255, 255, 255, 0.05);
         }
 
-        /* Animación de rotación del borde en blanco y negro */
         .card-wrapper::before {
             content: '';
             position: absolute;
             width: 200%;
             height: 200%;
-            /* Degradado cónico en blanco y negro */
             background: conic-gradient(
                 from 0deg, 
                 transparent 20%, 
@@ -76,7 +74,7 @@
         }
 
         .glass-card {
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 1.9rem;
             width: 100%;
@@ -90,30 +88,45 @@
             gap: 2rem;
         }
 
-        /* --- EFECTOS RÍTMICOS --- */
+        /* --- EFECTOS RÍTMICOS ADAPTADOS A 102 BPM (FEFE) --- */
+        /* Ciclo de 0.59s aprox para 102 BPM */
         @keyframes trap-main-pulse {
             0%, 100% { transform: scale(1); }
-            5% { transform: scale(1.06); filter: brightness(1.1); }
+            5% { transform: scale(1.07); filter: brightness(1.15); }
             15% { transform: scale(1); }
-            20% { transform: scale(1.02); }
+            20% { transform: scale(1.03); }
         }
         .animate-trap-main {
-            animation: trap-main-pulse 0.45s infinite cubic-bezier(0.2, 0, 0.1, 1);
+            animation: trap-main-pulse 0.59s infinite cubic-bezier(0.2, 0, 0.1, 1);
         }
 
-        /* Borde rítmico de la foto sincronizado con el beat */
         @keyframes border-glow-rhythm {
             0%, 100% { border-color: rgba(255, 255, 255, 0.1); }
-            5% { border-color: white; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+            5% { border-color: white; box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); }
         }
         .animate-border-rhythm {
-            animation: border-glow-rhythm 0.45s infinite cubic-bezier(0.2, 0, 0.1, 1);
+            animation: border-glow-rhythm 0.59s infinite cubic-bezier(0.2, 0, 0.1, 1);
         }
 
-        /* Visualizador de sonido */
+        /* Aberraciones RGB al ritmo de FEFE */
+        @keyframes trap-rgb-cyan {
+            0%, 100% { transform: translate(0,0); opacity: 0; }
+            5% { transform: translate(-10px, 5px); opacity: 0.4; }
+            15% { transform: translate(0,0); opacity: 0; }
+        }
+        .animate-trap-rgb-1 { animation: trap-rgb-cyan 0.59s infinite; }
+
+        @keyframes trap-rgb-red {
+            0%, 100% { transform: translate(0,0); opacity: 0; }
+            5% { transform: translate(10px, -5px); opacity: 0.4; }
+            15% { transform: translate(0,0); opacity: 0; }
+        }
+        .animate-trap-rgb-2 { animation: trap-rgb-red 0.59s infinite; }
+
+        /* Visualizador de sonido adaptado */
         @keyframes sound-bar-anim {
             0%, 100% { height: 4px; opacity: 0.3; }
-            50% { height: 26px; opacity: 1; }
+            50% { height: 30px; opacity: 1; }
         }
         .sound-bar {
             width: 3px;
@@ -122,7 +135,7 @@
             margin: 0 1px;
         }
 
-        /* Animaciones de carga */
+        /* Animaciones generales */
         .animate-fade-in { animation: fadeIn 2s forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -143,16 +156,16 @@
         );
 
         const SoundVisualizer = ({ active }) => {
-            const bars = Array.from({ length: 30 });
+            const bars = Array.from({ length: 32 });
             return (
-                <div className="flex items-end justify-center h-8 gap-[2px]">
+                <div className="flex items-end justify-center h-10 gap-[2px]">
                     {bars.map((_, i) => (
                         <div 
                             key={i} 
                             className="sound-bar"
                             style={{
                                 animation: active 
-                                    ? `sound-bar-anim ${0.3 + Math.random() * 0.5}s infinite ease-in-out` 
+                                    ? `sound-bar-anim ${0.35 + Math.random() * 0.4}s infinite ease-in-out` 
                                     : 'none',
                                 animationDelay: `${i * 0.02}s`
                             }}
@@ -185,6 +198,8 @@
             const playAudio = async () => {
                 if (audioRef.current) {
                     try {
+                        // Saltar al segundo 15 según solicitado
+                        audioRef.current.currentTime = 15;
                         await audioRef.current.play();
                         setIsPlaying(true);
                     } catch (err) {
@@ -203,7 +218,9 @@
                     audioRef.current.pause();
                     setIsPlaying(false);
                 } else {
-                    playAudio();
+                    // Si se reanuda, no necesariamente salta al 15 a menos que sea el inicio
+                    audioRef.current.play();
+                    setIsPlaying(true);
                 }
             };
 
@@ -211,7 +228,7 @@
                 <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden select-none">
                     <audio ref={audioRef} src="musica.mp3" loop />
 
-                    {/* Estrellas de fondo */}
+                    {/* Fondo de Estrellas */}
                     <div className="absolute inset-0 z-0 pointer-events-none">
                         {stars.map((star) => (
                             <div key={star.id} className="absolute bg-white rounded-full opacity-0"
@@ -225,32 +242,43 @@
 
                     {!hasEntered ? (
                         /* INTRO LUXURY */
-                        <div className="relative z-20 flex flex-col items-center space-y-12 animate-fade-in px-4">
-                            <h1 className="text-7xl md:text-9xl font-bold tracking-[0.4em] text-center uppercase text-white">
+                        <div className="relative z-20 flex flex-col items-center space-y-12 animate-fade-in px-4 text-center">
+                            <h1 className="text-7xl md:text-9xl font-bold tracking-[0.4em] uppercase text-white">
                                 DEIS
                             </h1>
-                            <button onClick={handleEnter} className="px-16 py-6 border border-white/30 font-light text-[10px] tracking-[0.6em] uppercase hover:border-white hover:bg-white hover:text-black transition-all duration-700 rounded-full">
+                            <button 
+                                onClick={handleEnter} 
+                                className="px-16 py-6 border border-white/30 font-light text-[10px] tracking-[0.6em] uppercase hover:border-white hover:bg-white hover:text-black transition-all duration-700 rounded-full"
+                            >
                                 Enter System
                             </button>
                         </div>
                     ) : (
-                        /* CONTENIDO PRINCIPAL CON TARJETA ESTILO KENZA */
+                        /* CONTENIDO PRINCIPAL ADAPTADO AL BPM DE FEFE */
                         <div className="relative z-10 flex flex-col items-center animate-fade-in-up w-full max-w-lg px-4">
                             
                             <div className="card-wrapper w-full">
                                 <div className="glass-card">
                                     
-                                    {/* Nombre Blanco Minimalista */}
+                                    {/* Nombre Cinzel */}
                                     <h1 className="text-4xl md:text-6xl font-bold tracking-[0.5em] text-center uppercase text-white mb-2">
                                         DEIS
                                     </h1>
 
-                                    {/* Foto Cuadrada con Parpadeo */}
-                                    <div className={`relative w-64 h-64 md:w-72 md:h-72 border-[1px] transition-all duration-700 overflow-hidden bg-zinc-950 animate-photo-blink ${isPlaying ? 'animate-trap-main animate-border-rhythm border-white' : 'border-white/10'}`}>
-                                        <img src="https://xatimg.com/image/fx2VKgs21uNd.jpg" alt="Deis" className="w-full h-full object-cover grayscale-[30%] hover:grayscale-0 transition-all duration-1000" />
+                                    {/* Foto Cuadrada con Beats a 102 BPM */}
+                                    <div className="relative">
+                                        {isPlaying && (
+                                            <>
+                                                <div className="absolute inset-0 rounded-none bg-cyan-400/20 blur-md animate-trap-rgb-1" />
+                                                <div className="absolute inset-0 rounded-none bg-red-500/20 blur-md animate-trap-rgb-2" />
+                                            </>
+                                        )}
+                                        <div className={`relative w-64 h-64 md:w-72 md:h-72 border-[1px] transition-all duration-700 overflow-hidden bg-zinc-950 animate-photo-blink ${isPlaying ? 'animate-trap-main animate-border-rhythm border-white' : 'border-white/10'}`}>
+                                            <img src="https://xatimg.com/image/fx2VKgs21uNd.jpg" alt="Deis" className="w-full h-full object-cover grayscale-[30%] hover:grayscale-0 transition-all duration-1000" />
+                                        </div>
                                     </div>
 
-                                    {/* Visualizador de Barras de Sonido */}
+                                    {/* Visualizador de Barras Sincronizado */}
                                     <div className="w-full">
                                         <SoundVisualizer active={isPlaying} />
                                     </div>
@@ -260,9 +288,9 @@
                         </div>
                     )}
 
-                    {/* Reproductor Inferior */}
+                    {/* Reproductor con Nombre de la Canción Solicitada */}
                     {hasEntered && (
-                        <div className={`fixed bottom-10 left-10 z-50 transition-all duration-1000 ${isPlayerExpanded ? 'w-72' : 'w-16'}`}>
+                        <div className={`fixed bottom-10 left-10 z-50 transition-all duration-1000 ${isPlayerExpanded ? 'w-80' : 'w-16'}`}>
                             <div className="bg-white/[0.02] backdrop-blur-3xl border border-white/5 rounded-full overflow-hidden shadow-2xl">
                                 <div className="flex items-center p-5 cursor-pointer justify-between" onClick={() => setIsPlayerExpanded(!isPlayerExpanded)}>
                                     <div className="flex items-center gap-5">
@@ -270,9 +298,11 @@
                                             <IconMusic className="w-4 h-4" />
                                         </div>
                                         {isPlayerExpanded && (
-                                            <div className="flex flex-col animate-fade-in text-white">
+                                            <div className="flex flex-col animate-fade-in text-white overflow-hidden">
                                                 <span className="text-[7px] uppercase tracking-[0.4em] text-white/30 font-bold mb-1">Signal Active</span>
-                                                <span className="text-[9px] font-bold tracking-[0.2em] truncate uppercase">Alessia Cara - Here</span>
+                                                <span className="text-[9px] font-bold tracking-[0.1em] truncate uppercase max-w-[180px]">
+                                                    6ix9ine, Nicki Minaj - FEFE ft. Murda Beatz
+                                                </span>
                                             </div>
                                         )}
                                     </div>
