@@ -3,83 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEIS</title>
-    <!-- Tailwind CSS para el diseño -->
+    <title>DEIS - Pure Luxury Space</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React y Babel para ejecutar el código directamente en el navegador -->
+    <!-- React y Babel -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&display=swap');
 
-        body { background-color: black; margin: 0; overflow: hidden; }
+        body { 
+            background-color: black; 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: 'Syncopate', sans-serif;
+            color: white;
+        }
 
-        @keyframes blink {
+        /* Fondo de estrellas */
+        @keyframes blink-star {
             0%, 100% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 0.7; transform: scale(1.1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
         }
 
-        @keyframes gradientWave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Efecto de parpadeo solicitado para la foto */
+        @keyframes photo-blink {
+            0%, 100% { opacity: 1; filter: brightness(1); }
+            50% { opacity: 0.7; filter: brightness(1.3); }
+        }
+        .animate-photo-blink {
+            animation: photo-blink 3s infinite ease-in-out;
         }
 
-        /* EFECTO TRAP NATION - BASADO EN 133 BPM (0.45s) */
+        /* Pulso rítmico estilo Trap Nation */
         @keyframes trap-main-pulse {
             0%, 100% { transform: scale(1); }
-            5% { transform: scale(1.12); filter: brightness(1.1); }
+            5% { transform: scale(1.08); filter: brightness(1.2); }
             15% { transform: scale(1); }
-            20% { transform: scale(1.05); }
+            20% { transform: scale(1.03); }
             30% { transform: scale(1); }
         }
         .animate-trap-main {
             animation: trap-main-pulse 0.45s infinite cubic-bezier(0.2, 0, 0.1, 1);
         }
 
+        /* Borde rítmico coordinado con el beat */
+        @keyframes border-glow-rhythm {
+            0%, 100% { border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); }
+            5% { border-color: white; box-shadow: 0 0 30px rgba(255, 255, 255, 0.5); }
+        }
+        .animate-border-rhythm {
+            animation: border-glow-rhythm 0.45s infinite cubic-bezier(0.2, 0, 0.1, 1);
+        }
+
+        /* Aberración cromática sutil */
         @keyframes trap-rgb-cyan {
             0%, 100% { transform: translate(0,0); opacity: 0; }
-            5% { transform: translate(-12px, 6px); opacity: 0.6; }
+            5% { transform: translate(-8px, 4px); opacity: 0.3; }
             15% { transform: translate(0,0); opacity: 0; }
         }
         .animate-trap-rgb-1 { animation: trap-rgb-cyan 0.45s infinite; }
 
         @keyframes trap-rgb-red {
             0%, 100% { transform: translate(0,0); opacity: 0; }
-            5% { transform: translate(12px, -6px); opacity: 0.6; }
+            5% { transform: translate(8px, -4px); opacity: 0.3; }
             15% { transform: translate(0,0); opacity: 0; }
         }
         .animate-trap-rgb-2 { animation: trap-rgb-red 0.45s infinite; }
 
-        @keyframes trapBeatText {
-            0%, 100% { transform: scale(1); }
-            5% { transform: scale(1.05); filter: brightness(1.3); }
-        }
-
-        @keyframes float-1 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(-25px, -25px) rotate(15deg); }
-        }
-        .animate-float-1 { animation: float-1 4s infinite ease-in-out; }
-
-        @keyframes float-2 {
-            0%, 100% { transform: translate(0, 0) rotate(180deg); }
-            50% { transform: translate(25px, 25px) rotate(195deg); }
-        }
-        .animate-float-2 { animation: float-2 5s infinite ease-in-out; }
-
-        .animate-fade-in { animation: fadeIn 1s forwards; }
+        /* Animaciones de entrada y flotación */
+        .animate-fade-in { animation: fadeIn 2s forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .animate-fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes float-rocket {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-15px, -15px) rotate(10deg); }
+        }
+        .animate-float { animation: float-rocket 5s infinite ease-in-out; }
 
         @keyframes progress-sim { from { width: 0%; } to { width: 100%; } }
         .animate-progress-sim { animation: progress-sim 200s linear infinite; }
-
-        .animate-spin-slow { animation: spin 4s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -88,62 +95,19 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // Componentes de Iconos SVG para evitar errores de removeChild con librerías externas
+        // Iconos SVG personalizados
         const IconRocket = ({ className }) => (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className={className}>
                 <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.59.79-1.35.79-1.35l-4.5-4.5s-.76.08-1.35.79z" />
                 <path d="M15 7s-1.4-1.4-3 0l-7 7c-1.4 1.4 0 3 0 3l7-7c1.4-1.4 0-3 0-3z" />
-                <path d="M9 15l3 3" />
-                <path d="M15 9l3 3" />
+                <path d="M9 15l3 3" /><path d="M15 9l3 3" />
                 <path d="M15 5c3.5 0 6 2.5 6 6 0 1.5-1 3-2 4L10 6c1-1 2.5-2 4-2z" />
             </svg>
         );
 
         const IconMusic = ({ className }) => (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className}>
                 <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
-            </svg>
-        );
-
-        const IconPlay = ({ className }) => (
-            <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-                <polygon points="5 3 19 12 5 21 5 3" />
-            </svg>
-        );
-
-        const IconPause = ({ className }) => (
-            <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-                <rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" />
-            </svg>
-        );
-
-        const IconSkipBack = ({ className }) => (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <polygon points="19 20 9 12 19 4 19 20" /><line x1="5" y1="19" x2="5" y2="5" />
-            </svg>
-        );
-
-        const IconSkipForward = ({ className }) => (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <polygon points="5 4 15 12 5 20 5 4" /><line x1="19" y1="5" x2="19" y2="19" />
-            </svg>
-        );
-
-        const IconChevronUp = ({ className }) => (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <polyline points="18 15 12 9 6 15" />
-            </svg>
-        );
-
-        const IconChevronDown = ({ className }) => (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <polyline points="6 9 12 15 18 9" />
-            </svg>
-        );
-
-        const IconAlertCircle = ({ className }) => (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
         );
 
@@ -156,14 +120,14 @@
             const audioRef = useRef(null);
 
             useEffect(() => {
-                const starCount = 150;
+                const starCount = 200;
                 const newStars = Array.from({ length: starCount }).map((_, i) => ({
                     id: i,
                     left: `${Math.random() * 100}%`,
                     top: `${Math.random() * 100}%`,
-                    size: Math.random() * 2 + 1,
+                    size: Math.random() * 1.5 + 0.5,
                     delay: Math.random() * 5,
-                    duration: 2 + Math.random() * 5,
+                    duration: 2 + Math.random() * 6,
                 }));
                 setStars(newStars);
             }, []);
@@ -195,106 +159,112 @@
                 }
             };
 
-            const gradientStyle = "linear-gradient(-45deg, rgb(95, 0, 124) 3%, rgb(167, 0, 62) 18.6667%, rgb(239, 0, 0) 34.3333%, rgb(95, 0, 124) 50%)";
-
             return (
-                <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden font-sans select-none">
+                <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden select-none">
                     <audio ref={audioRef} src="musica.mp3" loop onError={() => setAudioError(true)} />
 
+                    {/* Fondo de Estrellas */}
                     <div className="absolute inset-0 z-0 pointer-events-none">
                         {stars.map((star) => (
                             <div key={star.id} className="absolute bg-white rounded-full opacity-0"
                                 style={{
                                     left: star.left, top: star.top, width: `${star.size}px`, height: `${star.size}px`,
-                                    animation: `blink ${star.duration}s infinite ${star.delay}s`,
+                                    animation: `blink-star ${star.duration}s infinite ${star.delay}s`,
                                 }}
                             />
                         ))}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-900/5 blur-[150px] rounded-full" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-white/[0.02] blur-[200px] rounded-full" />
                     </div>
 
                     {!hasEntered ? (
-                        <div className="relative z-20 flex flex-col items-center space-y-12 animate-fade-in">
-                            <h1 className="text-8xl md:text-[12rem] font-black tracking-tighter text-center"
-                                style={{
-                                    backgroundImage: gradientStyle, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                                    backgroundSize: '300% 300%', animation: 'gradientWave 5s ease infinite',
-                                    textShadow: '0 20px 50px rgba(239, 0, 0, 0.3)', fontFamily: "'Exo 2', sans-serif"
-                                }}>
+                        /* PANTALLA DE ENTRADA */
+                        <div className="relative z-20 flex flex-col items-center space-y-16 animate-fade-in px-4">
+                            <h1 className="text-7xl md:text-[10rem] font-bold tracking-[0.4em] text-center uppercase text-white"
+                                style={{ fontFamily: "'Syncopate', sans-serif" }}>
                                 DEIS
                             </h1>
                             <div className="relative group">
-                                <IconRocket className="absolute -top-12 -left-12 text-red-500 animate-float-1 opacity-50 w-8 h-8" />
-                                <IconRocket className="absolute -bottom-8 -right-12 text-purple-500 rotate-180 animate-float-2 opacity-50 w-8 h-8" />
-                                <button onClick={handleEnter} className="relative px-12 py-5 bg-transparent border-2 border-red-600 rounded-full font-black text-2xl tracking-[0.2em] uppercase overflow-hidden transition-all duration-300 hover:scale-110 active:scale-95 group shadow-[0_0_30px_rgba(239,0,0,0.4)]">
+                                <IconRocket className="absolute -top-16 -left-16 text-white/30 animate-float w-10 h-10" />
+                                <IconRocket className="absolute -bottom-12 -right-16 text-white/30 rotate-180 animate-float w-10 h-10" style={{animationDelay: '-2s'}} />
+                                <button onClick={handleEnter} className="relative px-16 py-6 bg-black border border-white/40 rounded-none font-bold text-lg tracking-[0.6em] uppercase overflow-hidden transition-all duration-700 hover:border-white hover:scale-105 active:scale-95 group">
                                     <span className="relative z-10">Enter</span>
-                                    <div className="absolute inset-0 bg-red-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                                    <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-700"></div>
                                 </button>
                             </div>
                         </div>
                     ) : (
-                        <div className="relative z-10 flex flex-col items-center space-y-8 animate-fade-in-up">
-                            <h1 className="text-7xl md:text-9xl font-black tracking-tighter text-center"
-                                style={{
-                                    backgroundImage: gradientStyle, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                                    backgroundSize: '300% 300%', animation: `gradientWave 5s ease infinite ${isPlaying ? ', trapBeatText 0.45s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275)' : ''}`,
-                                    textShadow: '0 4px 0 #000, 0 20px 40px rgba(239, 0, 0, 0.3)', fontFamily: "'Exo 2', sans-serif"
-                                }}>
+                        /* CONTENIDO PRINCIPAL */
+                        <div className="relative z-10 flex flex-col items-center space-y-14 animate-fade-in-up w-full max-w-4xl px-4">
+                            <h1 className="text-5xl md:text-8xl font-bold tracking-[0.5em] text-center uppercase text-white"
+                                style={{ fontFamily: "'Syncopate', sans-serif" }}>
                                 DEIS
                             </h1>
-                            <div className="relative">
+                            
+                            <div className="relative group">
+                                {/* Aberración Cromática Sutil al Beat */}
                                 {isPlaying && (
                                     <>
-                                        <div className="absolute inset-0 rounded-full bg-cyan-500/40 blur-md animate-trap-rgb-1" />
-                                        <div className="absolute inset-0 rounded-full bg-red-600/40 blur-md animate-trap-rgb-2" />
+                                        <div className="absolute inset-0 rounded-none bg-cyan-400/20 blur-md animate-trap-rgb-1" />
+                                        <div className="absolute inset-0 rounded-none bg-red-500/20 blur-md animate-trap-rgb-2" />
                                     </>
                                 )}
-                                <div className={`relative w-64 h-64 md:w-80 md:h-80 rounded-full border-[6px] border-white shadow-2xl overflow-hidden ${isPlaying ? 'animate-trap-main' : ''}`}>
-                                    <img src="https://xatimg.com/image/fx2VKgs21uNd.jpg" alt="Deis" className="w-full h-full object-cover" />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-red-900/20 to-transparent" />
+                                
+                                {/* Foto de Perfil Cuadrada con Efecto de Parpadeo y Beat */}
+                                <div className={`relative w-64 h-64 md:w-96 md:h-96 border-[1px] shadow-[0_0_40px_rgba(255,255,255,0.05)] transition-all duration-700 overflow-hidden bg-zinc-900 animate-photo-blink ${isPlaying ? 'animate-trap-main animate-border-rhythm border-white' : 'border-white/20'}`}>
+                                    <img src="https://xatimg.com/image/fx2VKgs21uNd.jpg" alt="Deis" className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-1000" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                                 </div>
                             </div>
-                            {audioError && (
-                                <div className="flex items-center gap-2 text-red-500 bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20 animate-pulse">
-                                    <IconAlertCircle className="w-4 h-4" />
-                                    <span className="text-xs font-bold uppercase tracking-tighter">Error: musica.mp3 no encontrado</span>
-                                </div>
-                            )}
                         </div>
                     )}
 
+                    {/* INTERFAZ DEL REPRODUCTOR */}
                     {hasEntered && (
-                        <div className={`fixed bottom-6 left-6 z-50 transition-all duration-500 ease-out ${isPlayerExpanded ? 'w-64' : 'w-14'}`}>
-                            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-2xl shadow-black">
-                                <div className="flex items-center p-3 cursor-pointer justify-between" onClick={() => setIsPlayerExpanded(!isPlayerExpanded)}>
-                                    <div className="flex items-center gap-3">
-                                        <div className={`p-1 rounded-full bg-red-600 ${isPlaying ? 'animate-spin-slow' : ''}`}>
-                                            <IconMusic className="w-4 h-4 text-white" />
+                        <div className={`fixed bottom-10 left-10 z-50 transition-all duration-1000 ease-in-out ${isPlayerExpanded ? 'w-72' : 'w-16'}`}>
+                            <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-none overflow-hidden shadow-2xl">
+                                <div className="flex items-center p-5 cursor-pointer justify-between" onClick={() => setIsPlayerExpanded(!isPlayerExpanded)}>
+                                    <div className="flex items-center gap-5">
+                                        <div className={`p-1.5 border border-white/20 ${isPlaying ? 'animate-spin-slow text-white' : 'text-white/20'}`}>
+                                            <IconMusic className="w-4 h-4" />
                                         </div>
                                         {isPlayerExpanded && (
                                             <div className="flex flex-col overflow-hidden animate-fade-in text-white">
-                                                <span className="text-[10px] uppercase tracking-widest text-red-500 font-bold">Sonando ahora</span>
-                                                <span className="text-xs font-bold truncate">Alessia Cara - Here</span>
+                                                <span className="text-[8px] uppercase tracking-[0.4em] text-white/40 font-bold mb-1">Signal Active</span>
+                                                <span className="text-[10px] font-bold tracking-[0.2em] truncate uppercase">Alessia Cara - Here</span>
                                             </div>
                                         )}
                                     </div>
-                                    {isPlayerExpanded ? <IconChevronDown className="w-4 h-4 text-white" /> : <IconChevronUp className="w-4 h-4 text-white" />}
+                                    <div className="text-white/20">
+                                        {isPlayerExpanded ? (
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4"><polyline points="6 9 12 15 18 9" /></svg>
+                                        ) : (
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4"><polyline points="18 15 12 9 6 15" /></svg>
+                                        )}
+                                    </div>
                                 </div>
                                 {isPlayerExpanded && (
-                                    <div className="px-4 pb-4 space-y-4 animate-fade-in">
-                                        <div className="flex items-center justify-center gap-6">
-                                            <IconSkipBack className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer" />
-                                            <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition">
-                                                {isPlaying ? <IconPause className="w-5 h-5" /> : <IconPlay className="w-5 h-5" />}
+                                    <div className="px-6 pb-8 space-y-8 animate-fade-in">
+                                        <div className="flex items-center justify-center">
+                                            <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-16 h-16 border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500">
+                                                {isPlaying ? (
+                                                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
+                                                ) : (
+                                                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-1"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                                                )}
                                             </button>
-                                            <IconSkipForward className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer" />
                                         </div>
-                                        <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                                            <div className={`h-full bg-red-600 ${isPlaying ? 'animate-progress-sim' : 'w-0'}`}></div>
+                                        <div className="h-[1px] bg-white/10 w-full relative">
+                                            <div className={`h-full bg-white ${isPlaying ? 'animate-progress-sim' : 'w-0'}`}></div>
                                         </div>
                                     </div>
                                 )}
                             </div>
+                        </div>
+                    )}
+                    
+                    {audioError && isPlaying && (
+                        <div className="fixed top-8 right-8 text-white/30 text-[10px] tracking-widest uppercase animate-pulse">
+                            Audio Stream Offline
                         </div>
                     )}
                 </div>
