@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEIS - Space Experience</title>
+    <!-- Tailwind CSS para el diseño -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React y Babel para ejecutar el código directamente en el navegador -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@900&display=swap');
+
+        body { background-color: black; margin: 0; overflow: hidden; }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        @keyframes gradientWave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* EFECTO TRAP NATION - BASADO EN 133 BPM (0.45s) */
+        @keyframes trap-main-pulse {
+            0%, 100% { transform: scale(1); }
+            5% { transform: scale(1.12); filter: brightness(1.1); }
+            15% { transform: scale(1); }
+            20% { transform: scale(1.05); }
+            30% { transform: scale(1); }
+        }
+        .animate-trap-main {
+            animation: trap-main-pulse 0.45s infinite cubic-bezier(0.2, 0, 0.1, 1);
+        }
+
+        @keyframes trap-rgb-cyan {
+            0%, 100% { transform: translate(0,0); opacity: 0; }
+            5% { transform: translate(-12px, 6px); opacity: 0.6; }
+            15% { transform: translate(0,0); opacity: 0; }
+        }
+        .animate-trap-rgb-1 { animation: trap-rgb-cyan 0.45s infinite; }
+
+        @keyframes trap-rgb-red {
+            0%, 100% { transform: translate(0,0); opacity: 0; }
+            5% { transform: translate(12px, -6px); opacity: 0.6; }
+            15% { transform: translate(0,0); opacity: 0; }
+        }
+        .animate-trap-rgb-2 { animation: trap-rgb-red 0.45s infinite; }
+
+        @keyframes trapBeatText {
+            0%, 100% { transform: scale(1); }
+            5% { transform: scale(1.05); filter: brightness(1.3); }
+        }
+
+        @keyframes float-1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-25px, -25px) rotate(15deg); }
+        }
+        .animate-float-1 { animation: float-1 4s infinite ease-in-out; }
+
+        @keyframes float-2 {
+            0%, 100% { transform: translate(0, 0) rotate(180deg); }
+            50% { transform: translate(25px, 25px) rotate(195deg); }
+        }
+        .animate-float-2 { animation: float-2 5s infinite ease-in-out; }
+
+        .animate-fade-in { animation: fadeIn 1s forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .animate-fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes progress-sim { from { width: 0%; } to { width: 100%; } }
+        .animate-progress-sim { animation: progress-sim 200s linear infinite; }
+
+        .animate-spin-slow { animation: spin 4s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const App = () => {
+            const [hasEntered, setHasEntered] = useState(false);
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [isPlayerExpanded, setIsPlayerExpanded] = useState(false);
+            const [stars, setStars] = useState([]);
+            const [audioError, setAudioError] = useState(false);
+            const audioRef = useRef(null);
+
+            useEffect(() => {
+                const starCount = 150;
+                const newStars = Array.from({ length: starCount }).map((_, i) => ({
+                    id: i,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    size: Math.random() * 2 + 1,
+                    delay: Math.random() * 5,
+                    duration: 2 + Math.random() * 5,
+                }));
+                setStars(newStars);
+            }, []);
+
+            const playAudio = async () => {
+                if (audioRef.current) {
+                    try {
+                        setAudioError(false);
+                        await audioRef.current.play();
+                        setIsPlaying(true);
+                    } catch (err) {
+                        setAudioError(true);
+                        setIsPlaying(false);
+                    }
+                }
+            };
+
+            const handleEnter = () => {
+                setHasEntered(true);
+                playAudio();
+            };
+
+            const togglePlay = () => {
+                if (isPlaying) {
+                    audioRef.current.pause();
+                    setIsPlaying(false);
+                } else {
+                    playAudio();
+                }
+            };
+
+            const gradientStyle = "linear-gradient(-45deg, rgb(95, 0, 124) 3%, rgb(167, 0, 62) 18.6667%, rgb(239, 0, 0) 34.3333%, rgb(95, 0, 124) 50%)";
+
+            return (
+                <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center relative overflow-hidden font-sans select-none">
+                    <audio ref={audioRef} src="musica.mp3" loop onError={() => setAudioError(true)} />
+
+                    <div className="absolute inset-0 z-0 pointer-events-none">
+                        {stars.map((star) => (
+                            <div key={star.id} className="absolute bg-white rounded-full opacity-0"
+                                style={{
+                                    left: star.left, top: star.top, width: `${star.size}px`, height: `${star.size}px`,
+                                    animation: `blink ${star.duration}s infinite ${star.delay}s`,
+                                }}
+                            />
+                        ))}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-900/5 blur-[150px] rounded-full" />
+                    </div>
+
+                    {!hasEntered ? (
+                        <div className="relative z-20 flex flex-col items-center space-y-12 animate-fade-in">
+                            <h1 className="text-8xl md:text-[12rem] font-black tracking-tighter text-center"
+                                style={{
+                                    backgroundImage: gradientStyle, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                                    backgroundSize: '300% 300%', animation: 'gradientWave 5s ease infinite',
+                                    textShadow: '0 20px 50px rgba(239, 0, 0, 0.3)', fontFamily: "'Exo 2', sans-serif"
+                                }}>
+                                DEIS
+                            </h1>
+                            <div className="relative group">
+                                <i data-lucide="rocket" className="absolute -top-12 -left-12 text-red-500 animate-float-1 opacity-50 w-8 h-8"></i>
+                                <i data-lucide="rocket" className="absolute -bottom-8 -right-12 text-purple-500 rotate-180 animate-float-2 opacity-50 w-8 h-8"></i>
+                                <button onClick={handleEnter} className="relative px-12 py-5 bg-transparent border-2 border-red-600 rounded-full font-black text-2xl tracking-[0.2em] uppercase overflow-hidden transition-all duration-300 hover:scale-110 active:scale-95 group shadow-[0_0_30px_rgba(239,0,0,0.4)]">
+                                    <span className="relative z-10">Enter</span>
+                                    <div className="absolute inset-0 bg-red-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="relative z-10 flex flex-col items-center space-y-8 animate-fade-in-up">
+                            <h1 className="text-7xl md:text-9xl font-black tracking-tighter text-center"
+                                style={{
+                                    backgroundImage: gradientStyle, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                                    backgroundSize: '300% 300%', animation: `gradientWave 5s ease infinite ${isPlaying ? ', trapBeatText 0.45s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275)' : ''}`,
+                                    textShadow: '0 4px 0 #000, 0 20px 40px rgba(239, 0, 0, 0.3)', fontFamily: "'Exo 2', sans-serif"
+                                }}>
+                                DEIS
+                            </h1>
+                            <div className="relative">
+                                {isPlaying && (
+                                    <>
+                                        <div className="absolute inset-0 rounded-full bg-cyan-500/40 blur-md animate-trap-rgb-1" />
+                                        <div className="absolute inset-0 rounded-full bg-red-600/40 blur-md animate-trap-rgb-2" />
+                                    </>
+                                )}
+                                <div className={`relative w-64 h-64 md:w-80 md:h-80 rounded-full border-[6px] border-white shadow-2xl overflow-hidden ${isPlaying ? 'animate-trap-main' : ''}`}>
+                                    <img src="https://xatimg.com/image/fx2VKgs21uNd.jpg" alt="Deis" className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-red-900/20 to-transparent" />
+                                </div>
+                            </div>
+                            {audioError && (
+                                <div className="flex items-center gap-2 text-red-500 bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20 animate-pulse">
+                                    <i data-lucide="alert-circle" className="w-4 h-4"></i>
+                                    <span className="text-xs font-bold uppercase tracking-tighter">Error: musica.mp3 no encontrado</span>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {hasEntered && (
+                        <div className={`fixed bottom-6 left-6 z-50 transition-all duration-500 ease-out ${isPlayerExpanded ? 'w-64' : 'w-14'}`}>
+                            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-2xl shadow-black">
+                                <div className="flex items-center p-3 cursor-pointer justify-between" onClick={() => setIsPlayerExpanded(!isPlayerExpanded)}>
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-1 rounded-full bg-red-600 ${isPlaying ? 'animate-spin-slow' : ''}`}>
+                                            <i data-lucide="music" className="w-4 h-4 text-white"></i>
+                                        </div>
+                                        {isPlayerExpanded && (
+                                            <div className="flex flex-col overflow-hidden animate-fade-in text-white">
+                                                <span className="text-[10px] uppercase tracking-widest text-red-500 font-bold">Sonando ahora</span>
+                                                <span className="text-xs font-bold truncate">Alessia Cara - Here</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <i data-lucide={isPlayerExpanded ? "chevron-down" : "chevron-up"} className="w-4 h-4 text-white"></i>
+                                </div>
+                                {isPlayerExpanded && (
+                                    <div className="px-4 pb-4 space-y-4 animate-fade-in">
+                                        <div className="flex items-center justify-center gap-6">
+                                            <i data-lucide="skip-back" className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer"></i>
+                                            <button onClick={(e) => { e.stopPropagation(); togglePlay(); }} className="w-10 h-10 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 transition">
+                                                <i data-lucide={isPlaying ? "pause" : "play"} className="w-5 h-5"></i>
+                                            </button>
+                                            <i data-lucide="skip-forward" className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer"></i>
+                                        </div>
+                                        <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                                            <div className={`h-full bg-red-600 ${isPlaying ? 'animate-progress-sim' : 'w-0'}`}></div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+        
+        // Inicializar iconos después de renderizar
+        setTimeout(() => lucide.createIcons(), 500);
+    </script>
+</body>
+</html>
